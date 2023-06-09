@@ -5,36 +5,34 @@ const getCategories = async (req, res) => {
   const name = req.query.name || "";
   try {
     const categories = await prisma.category.findMany({
-      where : { 
-        name: { 
-          contains: name, 
-        } 
+      where: {
+        name: {
+          contains: name,
+        },
       },
       orderBy: [
         {
-          name: 'asc',
+          name: "asc",
         },
       ],
-    })
-    res.status(200).json({
-      categories: categories,
-      total_categories: categories.length,
     });
+    res.status(200).json(categories);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getCategoryById = async (req, res) => {
   try {
-    const response = await prisma.category.findUnique({
+    const category = await prisma.category.findUnique({
       where: {
         id: parseInt(req.params.id),
       },
-    })
-    res.status(200).json(response);
+    });
+    if (!category) return res.status(404).json({ message: "No Data Found" });
+    res.status(200).json(category);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -45,13 +43,13 @@ const createCategory = async (req, res) => {
       data: {
         name: name,
       },
-    })
+    });
     res.status(201).json({
       message: "Category Created Successfuly",
       data: category,
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -60,7 +58,7 @@ const updateCategory = async (req, res) => {
     where: {
       id: parseInt(req.params.id),
     },
-  })
+  });
   if (!category) return res.status(404).json({ message: "No Data Found" });
 
   const name = req.body.name;
@@ -73,10 +71,10 @@ const updateCategory = async (req, res) => {
       data: {
         name: name,
       },
-    })
-    res.status(201).json({ message: "Category Updated Successfuly" });
+    });
+    res.status(200).json({ message: "Category Updated Successfuly" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -85,7 +83,7 @@ const deleteCategory = async (req, res) => {
     where: {
       id: parseInt(req.params.id),
     },
-  })
+  });
   if (!category) return res.status(404).json({ message: "No Data Found" });
 
   try {
@@ -93,10 +91,10 @@ const deleteCategory = async (req, res) => {
       where: {
         id: parseInt(req.params.id),
       },
-    })
+    });
     res.status(200).json({ message: "Category Deleted Successfuly" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 

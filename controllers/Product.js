@@ -34,12 +34,9 @@ const getProducts = async (req, res) => {
         } 
       },
     });
-    res.status(200).json({
-      products: products,
-      total_products: totalProducts.length,
-    });
+    res.status(200).json(products);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -60,7 +57,7 @@ const getProductById = async (req, res) => {
     })
     res.status(200).json(product);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -97,7 +94,7 @@ const createProduct = async (req, res) => {
         data: product,
       });
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   });
 };
@@ -148,12 +145,12 @@ const updateProduct = async (req, res) => {
         categoryId: parseInt(req.body.categoryId),
       },
     })
-    res.status(201).json({ 
+    res.status(200).json({ 
       message: "Product Updated Successfuly", 
       data: updateProduct 
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -177,7 +174,7 @@ const deleteProduct = async (req, res) => {
     })
     res.status(200).json({ message: "Product Deleted Successfuly" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
